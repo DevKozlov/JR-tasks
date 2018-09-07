@@ -1,0 +1,45 @@
+package com.javarush.task.task21.task2110;
+
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Enumeration;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
+/* 
+Рефакторинг методов
+*/
+public class Solution implements AutoCloseable{
+    public static void writeZipEntriesToFile(String zipFileName, String outputFileName) throws Exception{
+
+        Charset charset = StandardCharsets.UTF_8;
+        Path outputFilePath = Paths.get(outputFileName);
+        String newLine = System.getProperty("line.separator");
+        try (
+
+        ZipFile zip = new ZipFile(zipFileName);
+         BufferedWriter writer = Files.newBufferedWriter(outputFilePath, charset);
+            )
+        {
+            for (Enumeration entries = zip.entries(); entries.hasMoreElements(); ) {
+                String zipEntryName = ((ZipEntry) entries.nextElement()).getName() + newLine;
+                writer.write(zipEntryName, 0, zipEntryName.length());
+            }
+
+        }
+    }
+
+    @Override
+    public void close() throws Exception {
+
+    }
+
+    public static void main(String[] args) {
+
+    }
+}
